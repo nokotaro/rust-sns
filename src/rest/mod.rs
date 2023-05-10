@@ -4,8 +4,13 @@ use actix_web::{
 };
 
 pub mod ping;
+pub mod user;
 
-use crate::utils::{create_pool, DB_POOL, SETTINGS};
+use crate::{
+    driver::Driver,
+    gateway::UserGateway,
+    utils::{create_pool, DB_POOL, SETTINGS},
+};
 
 #[actix_web::main]
 pub async fn build() -> std::io::Result<()> {
@@ -23,5 +28,10 @@ pub async fn build() -> std::io::Result<()> {
 }
 
 fn routes(app: &mut web::ServiceConfig) {
-    app.service(web::resource("/v1/systems/ping").route(web::get().to(ping::ping)));
+    app.service(web::resource("/v1/systems/ping").route(web::get().to(ping::ping)))
+        .service(web::resource("/v1/user/create").route(web::post().to(user::create_user)));
+}
+
+pub struct Container {
+    user_port: UserGateway<Driver>,
 }

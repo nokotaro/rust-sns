@@ -1,4 +1,9 @@
+mod driver;
+mod error;
+mod gateway;
+mod port;
 mod rest;
+mod usecase;
 mod utils;
 
 fn main() {
