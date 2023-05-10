@@ -1,11 +1,21 @@
-use actix_web::{HttpServer, App, web};
+use actix_web::{
+    web::{self, Data},
+    App, HttpServer,
+};
 
 pub mod ping;
 
+use crate::utils::{create_pool, DB_POOL, SETTINGS};
+
 #[actix_web::main]
 pub async fn build() -> std::io::Result<()> {
+    let db_pool = create_pool().await;
+    DB_POOL.set(db_pool).unwrap();
+
     HttpServer::new(|| {
-        App::new().configure(routes)
+        App::new()
+            .app_data(Data::new(SETTINGS.clone()))
+            .configure(routes)
     })
     .bind(("127.0.0.1", 8080))?
     .run()

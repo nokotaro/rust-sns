@@ -1,4 +1,5 @@
 mod rest;
+mod utils;
 
 fn main() {
     if let Err(e) = rest::build() {
