@@ -1,0 +1,9 @@
+[package]
+name = "rust-sns"
+authors = ["Nokotaro Takeda"]
+version = "0.0.1"
+edition = "2021"
+
+[dependencies]
+actix-web = "4.3.1"
+serde_json = "1.0.96"
