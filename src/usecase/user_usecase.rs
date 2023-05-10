@@ -1,7 +1,7 @@
-use crate::port::user_port::UserPort;
+use crate::{domain::user::User, port::user_port::UserPort};
 use eyre::Result;
 
-pub async fn create_user(user_port: impl UserPort) -> Result<()> {
-    let _user = user_port.create_user().await?;
+pub async fn create_user(user_port: impl UserPort, user: User) -> Result<()> {
+    let _user = user_port.create_user(user).await?;
     Ok(())
 }

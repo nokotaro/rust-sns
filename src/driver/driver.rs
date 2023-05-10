@@ -8,14 +8,15 @@ pub struct Driver {}
 
 #[async_trait]
 pub trait DriverTrait {
-    async fn create_user(&self, table_name: &String) -> Result<()>;
+    async fn create_user(&self, name: String) -> Result<()>;
 }
 
 #[async_trait]
 impl DriverTrait for Driver {
-    async fn create_user(&self, table_name: &String) -> Result<()> {
-        let create_sql: &str = &format!("TODO{}", table_name);
-        sqlx::query(create_sql)
+    async fn create_user(&self, name: String) -> Result<()> {
+        let sql = &format!(r#"INSERT INTO users (name) VALUES ($1);"#);
+        sqlx::query(&sql)
+            .bind(name)
             .execute(DB_POOL.get().unwrap())
             .await?;
         Ok(())

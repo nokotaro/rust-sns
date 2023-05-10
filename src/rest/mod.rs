@@ -20,6 +20,9 @@ pub async fn build() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .app_data(Data::new(SETTINGS.clone()))
+            .app_data(Data::new(Container {
+                user_port: UserGateway { driver: Driver {} },
+            }))
             .configure(routes)
     })
     .bind(("127.0.0.1", 8080))?
