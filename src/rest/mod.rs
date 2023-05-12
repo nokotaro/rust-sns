@@ -35,7 +35,8 @@ pub async fn build() -> std::io::Result<()> {
 fn routes(app: &mut web::ServiceConfig) {
     app.service(web::resource("/v1/systems/ping").route(web::get().to(ping::ping)))
         .service(web::resource("/v1/user/create").route(web::post().to(user::create_user)))
-        .service(web::resource("/v1/note/create").route(web::post().to(note::create_note)));
+        .service(web::resource("/v1/note/create").route(web::post().to(note::create_note)))
+        .service(web::resource("/v1/note/timeline").route(web::get().to(note::get_timeline)));
 }
 
 pub struct Container {
