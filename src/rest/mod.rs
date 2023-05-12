@@ -3,12 +3,13 @@ use actix_web::{
     App, HttpServer,
 };
 
+pub mod note;
 pub mod ping;
 pub mod user;
 
 use crate::{
     driver::Driver,
-    gateway::UserGateway,
+    gateway::{NoteGateway, UserGateway},
     utils::{create_pool, DB_POOL, SETTINGS},
 };
 
@@ -22,6 +23,7 @@ pub async fn build() -> std::io::Result<()> {
             .app_data(Data::new(SETTINGS.clone()))
             .app_data(Data::new(Container {
                 user_port: UserGateway { driver: Driver {} },
+                note_port: NoteGateway { driver: Driver {} },
             }))
             .configure(routes)
     })
@@ -32,9 +34,11 @@ pub async fn build() -> std::io::Result<()> {
 
 fn routes(app: &mut web::ServiceConfig) {
     app.service(web::resource("/v1/systems/ping").route(web::get().to(ping::ping)))
-        .service(web::resource("/v1/user/create").route(web::post().to(user::create_user)));
+        .service(web::resource("/v1/user/create").route(web::post().to(user::create_user)))
+        .service(web::resource("/v1/note/create").route(web::post().to(note::create_note)));
 }
 
 pub struct Container {
     user_port: UserGateway<Driver>,
+    note_port: NoteGateway<Driver>,
 }
